@@ -220,7 +220,262 @@ copyButtons.forEach((button) => {
   });
 });
 
+// =========================
+// UCAPAN & DOA
+// =========================
+const API_URL = "https://script.google.com/macros/s/AKfycbxU_Nr17IloM5DXIJZKM4DE-EKtnYk9o24R9qRvCcHR7VB3acOsvYHrKe1q6657UHEi/exec";
 
+let allWishes = [];
+const INITIAL_WISHES = 5;
+
+// ================================
+// AMBIL UCAPAN DARI GOOGLE SHEETS
+// ================================
+async function loadWishes() {
+    const wishesContainer = document.getElementById("wishesContainer");
+
+    if (!wishesContainer) return;
+
+    try {
+        wishesContainer.innerHTML = `
+            <div class="wishes-loading">
+                Memuat ucapan...
+            </div>
+        `;
+
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        if (!data.success || !data.wishes) {
+            throw new Error("Data ucapan tidak tersedia");
+        }
+
+        // Simpan semua ucapan
+        allWishes = data.wishes;
+
+        // Terbaru berada di atas
+        allWishes.reverse();
+
+        renderWishes();
+
+    } catch (error) {
+        console.error("Gagal mengambil ucapan:", error);
+
+        wishesContainer.innerHTML = `
+            <div class="wishes-empty">
+                Belum ada ucapan.
+            </div>
+        `;
+    }
+}
+
+
+// ================================
+// TAMPILKAN UCAPAN
+// ================================
+function renderWishes(showAll = false) {
+    const wishesContainer = document.getElementById("wishesContainer");
+
+    if (!wishesContainer) return;
+
+    if (allWishes.length === 0) {
+        wishesContainer.innerHTML = `
+            <div class="wishes-empty">
+                Belum ada ucapan dan doa.
+            </div>
+        `;
+        return;
+    }
+
+    const wishesToShow = showAll
+        ? allWishes
+        : allWishes.slice(0, INITIAL_WISHES);
+
+    wishesContainer.innerHTML = wishesToShow.map(wish => `
+        <div class="wish-card">
+            <div class="wish-name">
+                ${escapeHTML(wish.name)}
+            </div>
+
+            <div class="wish-message">
+                ${escapeHTML(wish.message)}
+            </div>
+        </div>
+    `).join("");
+
+    // Tombol lihat lainnya
+    if (!showAll && allWishes.length > INITIAL_WISHES) {
+
+        const remaining = allWishes.length - INITIAL_WISHES;
+
+        const button = document.createElement("button");
+
+        button.className = "show-more-wishes";
+        button.textContent = `Lihat Ucapan Lainnya ↓`;
+
+        button.addEventListener("click", () => {
+            renderWishes(true);
+        });
+
+        wishesContainer.appendChild(button);
+    }
+}
+
+
+// ================================
+// KIRIM UCAPAN
+// ================================
+async function submitWish(name, message) {
+
+    const loading = document.getElementById("wishLoading");
+    const submitButton = document.getElementById("submitWishButton");
+
+    // Validasi
+    if (!name.trim() || !message.trim()) {
+        alert("Nama dan ucapan wajib diisi.");
+        return;
+    }
+
+    /*
+     * ================================
+     * LANGSUNG TAMPILKAN LOADING
+     * ================================
+     */
+
+    loading.classList.add("active");
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Mengirim...";
+    submitButton.style.opacity = "0.6";
+    submitButton.style.cursor = "not-allowed";
+
+
+    /*
+     * ================================
+     * BERIKAN WAKTU BROWSER
+     * UNTUK MENAMPILKAN LOADING
+     * SEBELUM FETCH
+     * ================================
+     */
+
+    await new Promise(resolve => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(resolve);
+        });
+    });
+
+
+    /*
+     * ================================
+     * KIRIM KE GOOGLE SHEETS
+     * ================================
+     */
+
+    try {
+
+        const response = await fetch(API_URL, {
+            method: "POST",
+
+            body: JSON.stringify({
+                name: name.trim(),
+                message: message.trim()
+            })
+        });
+
+
+        const result = await response.json();
+
+
+        if (!result.success) {
+            throw new Error(
+                result.message || "Gagal menyimpan ucapan"
+            );
+        }
+
+
+        /*
+         * ================================
+         * BERHASIL
+         * ================================
+         */
+
+        loading.classList.remove("active");
+
+        submitButton.disabled = false;
+        submitButton.textContent = "Kirim Ucapan";
+        submitButton.style.opacity = "1";
+        submitButton.style.cursor = "pointer";
+
+
+        // Kosongkan form
+        document.getElementById("wishName").value = "";
+        document.getElementById("wishMessage").value = "";
+
+
+        // Tampilkan ucapan terbaru
+        await loadWishes();
+
+
+        // Pesan berhasil
+        alert("Terima kasih atas ucapan dan doanya 🤍");
+
+
+    } catch (error) {
+
+        console.error("Gagal mengirim ucapan:", error);
+
+
+        /*
+         * ================================
+         * JIKA GAGAL
+         * ================================
+         */
+
+        loading.classList.remove("active");
+
+        submitButton.disabled = false;
+        submitButton.textContent = "Kirim Ucapan";
+        submitButton.style.opacity = "1";
+        submitButton.style.cursor = "pointer";
+
+
+        alert(
+            "Maaf, ucapan belum berhasil dikirim. Silakan coba lagi."
+        );
+    }
+}
+
+// ================================
+// KEAMANAN TEXT
+// ================================
+// Supaya isi ucapan tidak bisa memasukkan HTML/Script
+function escapeHTML(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+document.getElementById("wishForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name = document.getElementById("wishName").value;
+    const message = document.getElementById("wishMessage").value;
+
+    submitWish(name, message);
+
+});
+// ================================
+// JALANKAN SAAT WEBSITE DIBUKA
+// ================================
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadWishes();
+
+});
 // ========================================
 // SMOOTH NAVIGATION
 // ========================================
