@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Undangan pernikahan Resti Safitri & Kusnandi">
+  <title>Resti  & Kusnandi — Wedding Invitation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+  <!-- OPENING -->
+  <div class="opening" id="opening">
+    <div class="opening-inner">
+      <p class="eyebrow reveal">The Wedding Of</p>
+
+      <h1 class="opening-title reveal delay-1">
+        Resti <span>&</span> Kusnandi
+      </h1>
+
+      <p class="opening-date reveal delay-2">23 Agustus 2026</p>
+
+      <!-- Nama tamu hanya muncul jika URL memiliki ?to=Nama -->
+      <div class="guest-box reveal delay-2" id="guestBox" hidden>
+        <span>Kepada Yth.</span>
+        <strong id="guestName"></strong>
+      </div>
+
+      <button class="btn reveal delay-3" id="openInvitation">
+        Buka Undangan
+      </button>
+    </div>
+  </div>
+
+  <!-- MUSIC -->
+  <audio id="weddingMusic" loop preload="none">
+    <source src="musik/EdSheeran-Perfect.mp3" type="audio/mpeg">
+  </audio>
+  <button class="music-control" id="musicControl" aria-label="Kontrol musik" hidden>♪</button>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar" id="navbar" aria-label="Navigasi utama">
+    <a href="#home">Home</a>
+    <a href="#mempelai">Mempelai</a>
+    <a href="#acara">Acara</a>
+    <a href="#story">Story</a>
+    <a href="#gallery">Foto</a>
+    <a href="#lokasi">Lokasi</a>
+    <a href="#gift">Gift</a>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero section" id="home">
+      <div class="container">
+        <p class="eyebrow reveal-on-scroll">The Wedding Of</p>
+
+        <h2 class="hero-title reveal-on-scroll">
+          Resti <span>&</span> Kusnandi
+        </h2>
+
+        <div class="hero-photo reveal-on-scroll">
+          <img src="gambar/4.jpeg"
+               alt="Foto prewedding Resti dan Kusnandi">
+        </div>
+
+        <p class="date reveal-on-scroll">23 AGUSTUS 2026</p>
+
+        <p class="intro reveal-on-scroll">
+          Dengan penuh kebahagiaan, kami mengundang
+          Anda untuk menjadi bagian dari hari istimewa kami.
+        </p>
+      </div>
+    </section>
+
+    <!-- MEMPELAI -->
+    <section class="section" id="mempelai">
+      <div class="container">
+        <div class="section-heading reveal-on-scroll">
+          <p class="eyebrow">The Bride & Groom</p>
+          <h2>Mempelai</h2>
+          <p>
+            Dengan memohon rahmat dan ridho Allah SWT,
+            kami bermaksud menyelenggarakan pernikahan kami.
+          </p>
+        </div>
+
+        <div class="couple">
+          <article class="person reveal-on-scroll">
+            <div class="person-photo">
+              <img src="gambar/1.jpeg" alt="Resti Safitri">
+            </div>
+            <h3>Resti Safitri</h3>
+            <p>
+              Putri dari<br>
+              Bapak Usup Supriadi & Ibu Lilis Suryani
+            </p>
+          </article>
+
+          <div class="ampersand reveal-on-scroll">&</div>
+
+          <article class="person reveal-on-scroll">
+            <div class="person-photo">
+              <img src="gambar/2.jpeg" alt="Kusnandi">
+            </div>
+            <h3>Kusnandi</h3>
+            <p>
+              Putra dari<br>
+              Bapak Usep Supriatna & Ibu Rustanti
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACARA -->
+    <section class="section event-section" id="acara">
+      <div class="container">
+        <div class="section-heading reveal-on-scroll">
+          <p class="eyebrow">Save The Date</p>
+          <h2>Detail Acara</h2>
+        </div>
+
+        <div class="events">
+          <article class="event-card reveal-on-scroll">
+            <p class="event-number">01</p>
+            <h3>Akad Nikah</h3>
+            <p class="event-date">23 Agustus 2026</p>
+            <p class="event-time">Pukul : 09.00 WIB – Selesai</p>
+            <p class="event-place">Kediaman Mempelai Wanita</p>
+            <p class="event-place">Kp. Ciawitali RT 01 RW 07 Desa Gununghalu Kec. Gununghalu Kab. Bandung barat</p>
+          </article>
+
+          <article class="event-card reveal-on-scroll">
+            <p class="event-number">02</p>
+            <h3>Resepsi</h3>
+            <p class="event-date">23 Agustus 2026</p>
+            <p class="event-time">Jam akan diinformasikan</p>
+            <p class="event-place">Kediaman Mempelai Wanita</p>
+            <p class="event-place">Kp. Ciawitali RT 01 RW 07 Desa Gununghalu Kec. Gununghalu Kab. Bandung barat</p>
+          </article>
+        </div>
+
+        <div class="address-card reveal-on-scroll">
+          <span class="address-icon">⌖</span>
+         
+        </div>
+      </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="section countdown-section">
+      <div class="container">
+        <div class="section-heading reveal-on-scroll">
+          <p class="eyebrow">Counting The Days</p>
+          <h2>Menuju Hari Bahagia</h2>
+        </div>
+
+        <div class="countdown reveal-on-scroll">
+          <div class="count-box"><strong id="days">00</strong><span>Hari</span></div>
+          <div class="count-box"><strong id="hours">00</strong><span>Jam</span></div>
+          <div class="count-box"><strong id="minutes">00</strong><span>Menit</span></div>
+          <div class="count-box"><strong id="seconds">00</strong><span>Detik</span></div>
+        </div>
+
+        <p class="countdown-message" id="countdownMessage"></p>
+      </div>
+    </section>
+
+    <!-- LOVE STORY -->
+    <section class="section story-section" id="story">
+      <div class="container">
+        <div class="section-heading reveal-on-scroll">
+          <p class="eyebrow">Our Journey</p>
+          <h2>Love Story</h2>
+          <p>
+            Setiap kisah memiliki awal, perjalanan, dan akhirnya
+            menemukan rumah pada satu sama lain.
+          </p>
+        </div>
+
+        <!-- Data cerita ini masih placeholder.
+             Ganti setelah klien memberikan cerita final. -->
+        <div class="story-list">
+          <article class="story-item reveal-on-scroll">
+            <span class="story-dot"></span>
+            <div>
+              <span class="story-year">01</span>
+              <h3>15 Juni 2014 — The Beginning</h3>
+              <p>
+                Hari itu menjadi awal dari kisah kami, dua insan yang memilih untuk berjalan bersama dan saling mengenal lebih dalam dari waktu ke waktu.
+              </p>
+            </div>
+          </article>
+
+          <article class="story-item reveal-on-scroll">
+            <span class="story-dot"></span>
+            <div>
+              <span class="story-year">02</span>
+              <h3>21 Desember 2025 — The Engagement</h3>
+              <p>
+                Setelah melewati perjalanan panjang bersama, tibalah saatnya untuk membawa hubungan ini ke jenjang yang lebih serius. Pada 21 Desember 2025, 
+                kami mengikat janji pertunangan sebagai langkah menuju kehidupan yang kami impikan bersama.
+              </p>
+            </div>
+          </article>
+
+          <article class="story-item reveal-on-scroll">
+            <span class="story-dot"></span>
+            <div>
+              <span class="story-year">03</span>
+              <h3>23 Agustus 2026 — The Wedding</h3>
+              <p>
+                Kini, setelah lebih dari satu dekade perjalanan bersama, tibalah hari yang telah dinantikan. Pada 23 Agustus 2026, 
+                kami akan mengikat janji suci pernikahan dan memulai babak baru dalam kehidupan kami.
+              </p>
+            </div>
+          </article>
+
+         
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="section gallery-section" id="gallery">
+      <div class="container">
+        <div class="section-heading reveal-on-scroll">
+          <p class="eyebrow">Our Moments</p>
+          <h2>Gallery</h2>
+        </div>
+
+        <div class="gallery">
+          <button class="gallery-item reveal-on-scroll" type="button">
+            <img src="gambar/3.jpeg" alt="Foto prewedding 1" loading="lazy">
+          </button>
+
+          <button class="gallery-item reveal-on-scroll" type="button">
+            <img src="gambar/4.jpeg"
+                 alt="Foto prewedding 2" loading="lazy">
+          </button>
+
+          <button class="gallery-item reveal-on-scroll" type="button">
+            <img src="gambar/5.jpeg"
+                 alt="Foto prewedding 3" loading="lazy">
+          </button>
+
+          <button class="gallery-item reveal-on-scroll" type="button">
+            <img src="gambar/6.jpeg"
+                 alt="Foto prewedding 4" loading="lazy">
+          </button>
+
+          <button class="gallery-item reveal-on-scroll" type="button">
+            <img src="gambar/7.jpeg"
+                 alt="Foto prewedding 5" loading="lazy">
+          </button>
+
+          <button class="gallery-item reveal-on-scroll" type="button">
+            <img src="gambar/8.jpeg"
+                 alt="Foto prewedding 6" loading="lazy">
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Tutup">×</button>
+      <img id="lightboxImage" src="" alt="Foto diperbesar">
+    </div>
+
+    <!-- LOKASI -->
+    <section class="section location-section" id="lokasi">
+      <div class="container">
+        <div class="section-heading reveal-on-scroll">
+          <p class="eyebrow">Where We Celebrate</p>
+          <h2>Lokasi</h2>
+          <p>
+            
+          </p>
+        </div>
+
+        <div class="location-card reveal-on-scroll">
+          <div class="location-pin">⌖</div>
+          <h3>Gunung Halu</h3>
+          <p>Bandung Barat</p>
+        </div>
+
+        <!-- Ganti href dengan link Google Maps final dari klien -->
+        <a class="btn btn-outline reveal-on-scroll"
+           href="https://maps.app.goo.gl/VbsK8widQRWtPhML8"
+           target="_blank"
+           rel="noopener noreferrer">
+          Buka Google Maps
+        </a>
+      </div>
+    </section>
+
+    <!-- WEDDING GIFT -->
+    <section class="section gift-section" id="gift">
+      <div class="container">
+        <div class="section-heading reveal-on-scroll">
+          <p class="eyebrow">Tanda Kasih</p>
+          <h2>Wedding gift</h2>
+          <p>
+            Doa dan kehadiran Anda merupakan hadiah terindah bagi kami.
+            Bagi yang ingin memberikan tanda kasih, dapat melalui:
+          </p>
+        </div>
+
+        <div class="gift-grid">
+
+          <article class="gift-card reveal-on-scroll">
+         
+            <p class="gift-label">Resti Safitri</p>
+              <img
+    src="gambar/SeaBank.svg.webp"
+    alt="SeaBank"
+    class="bank-logo"
+  >
+            <p class="account-number" id="restiAccount">901817187066</p>
+            <button class="copy-btn"
+                    data-account="901817187066"
+                    data-default="Salin Rekening">
+              Salin Rekening
+            </button>
+          </article>
+
+          <article class="gift-card reveal-on-scroll">
+            <p class="gift-label">Kusnandi</p>
+               <img
+    src="gambar/SeaBank.svg.webp"
+    alt="SeaBank"
+    class="bank-logo"
+  >
+            <p class="account-number" id="kusnandiAccount">901695231985</p>
+            <button class="copy-btn"
+                    data-account="901695231985"
+                    data-default="Salin Rekening">
+              Salin Rekening
+            </button>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="section closing">
+      <div class="container reveal-on-scroll">
+        <p class="eyebrow">Thank You</p>
+        <h2>Resti <span>&</span> Kusnandi</h2>
+        <p>23 Agustus 2026</p>
+        <div class="closing-line"></div>
+        <p class="closing-small">
+          Merupakan suatu kebahagiaan bagi kami apabila
+          Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
