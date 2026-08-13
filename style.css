@@ -789,11 +789,32 @@ img {
 .wishes-section {
     background: #f8f4ed;
     padding: 90px 20px;
+    position: relative;
+    overflow: hidden;
 }
 
 .wishes-section .section-container {
+    position: relative;
+    z-index: 3;
     max-width: 650px;
     margin: 0 auto;
+}
+
+/* ORNAMEN BUNGA POJOK */
+.wish-flower {
+    width: 160px;
+    opacity: 0.4;
+    z-index: 1;
+}
+
+/* Garis flourish di bawah judul */
+.wishes-section .section-heading::after {
+    content: "❧";
+    display: block;
+    margin-top: 16px;
+    color: var(--gold);
+    font-size: 20px;
+    letter-spacing: 2px;
 }
 
 .wish-form {
@@ -844,6 +865,132 @@ img {
 
     box-shadow:
         0 0 0 3px rgba(184, 155, 94, 0.12);
+}
+
+/* PILIHAN KEHADIRAN */
+
+.attendance-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.attendance-option {
+    flex: 1;
+    min-width: 100px;
+
+    display: block;
+    text-align: center;
+
+    padding: 12px 8px;
+
+    border: 1px solid rgba(59, 48, 40, 0.15);
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #6b5c4f;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: border-color 0.25s ease,
+                background 0.25s ease,
+                color 0.25s ease,
+                transform 0.25s ease;
+}
+
+.attendance-option input {
+    /* input tersembunyi, tapi tetap bisa diakses keyboard/screen reader */
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.attendance-option:has(input:checked) {
+    background: var(--forest);
+    border-color: var(--forest);
+    color: #ffffff;
+    transform: translateY(-2px) scale(1.04);
+}
+
+.attendance-option:has(input:focus-visible) {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+/* BADGE KEHADIRAN DI KARTU UCAPAN */
+
+.wishes-loading,
+.wishes-empty {
+    text-align: center;
+    padding: 46px 24px;
+    margin-top: 20px;
+    border: 1px dashed rgba(184, 155, 94, 0.45);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.55);
+    color: #8c806d;
+    font-size: 13px;
+    letter-spacing: .2px;
+}
+
+.wishes-empty::before,
+.wishes-loading::before {
+    content: "❀";
+    display: block;
+    font-size: 24px;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+
+.wishes-loading::before {
+    animation: wishesLoadingSpin 2.4s linear infinite;
+}
+
+@keyframes wishesLoadingSpin {
+    to { transform: rotate(360deg); }
+}
+
+.wish-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.wish-card-header .wish-card-name {
+    margin: 0;
+}
+
+.attendance-badge {
+    flex-shrink: 0;
+
+    padding: 3px 12px;
+
+    border-radius: 30px;
+
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.attendance-badge.hadir {
+    background: rgba(41, 71, 53, 0.12);
+    color: var(--forest);
+}
+
+.attendance-badge.tidak-hadir {
+    background: rgba(155, 68, 68, 0.12);
+    color: #9b4444;
+}
+
+.attendance-badge.ragu-ragu {
+    background: rgba(184, 163, 106, 0.2);
+    color: #8f753f;
 }
 
 .wish-button {
@@ -935,6 +1082,11 @@ img {
 
     .wishes-section {
         padding: 70px 18px;
+    }
+
+    .wish-flower {
+        width: 90px;
+        opacity: 0.3;
     }
 
     .wish-card {
@@ -1088,6 +1240,25 @@ width: 190px;
   transform: translateY(0);
 }
 
+/* Animasi bertahap untuk tiap field di form ucapan */
+.wish-form.reveal-on-scroll .form-group,
+.wish-form.reveal-on-scroll .wish-button {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+.wish-form.reveal-on-scroll.visible .form-group,
+.wish-form.reveal-on-scroll.visible .wish-button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.wish-form.reveal-on-scroll .form-group:nth-child(1) { transition-delay: .05s; }
+.wish-form.reveal-on-scroll .form-group:nth-child(2) { transition-delay: .18s; }
+.wish-form.reveal-on-scroll .form-group:nth-child(3) { transition-delay: .31s; }
+.wish-form.reveal-on-scroll .wish-button { transition-delay: .44s; }
+
 /* Mobile */
 @media (max-width: 650px) {
   .section {
@@ -1173,4 +1344,34 @@ width: 190px;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+/* =================================
+   ANIMASI KARTU UCAPAN
+================================= */
+
+.wish-card {
+    opacity: 0;
+    transform: translateY(35px);
+}
+
+
+/* Animasi ketika masuk viewport */
+
+.wish-card.wish-animate {
+    animation: wishCardReveal 0.8s ease forwards;
+}
+
+
+@keyframes wishCardReveal {
+
+    0% {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
 }

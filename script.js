@@ -223,7 +223,7 @@ copyButtons.forEach((button) => {
 // =========================
 // UCAPAN & DOA
 // =========================
-const API_URL = "https://script.google.com/macros/s/AKfycbxU_Nr17IloM5DXIJZKM4DE-EKtnYk9o24R9qRvCcHR7VB3acOsvYHrKe1q6657UHEi/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw-uaBslFnP77qNLrfaH1nCHcM7rYrZHL381WZDhiNUzWGnW3PBoPLmRM9OlkJxsiUY/exec";
 
 let allWishes = [];
 const INITIAL_WISHES = 5;
@@ -293,46 +293,89 @@ function renderWishes(showAll = false) {
 
     wishesContainer.innerHTML = wishesToShow.map(wish => `
         <div class="wish-card">
-            <div class="wish-name">
-                ${escapeHTML(wish.name)}
+            <div class="wish-card-header">
+                <div class="wish-card-name">
+                    ${escapeHTML(wish.name)}
+                </div>
+                <span class="attendance-badge ${attendanceClass(wish.attendance)}">
+                    ${escapeHTML(wish.attendance || "Hadir")}
+                </span>
             </div>
 
-            <div class="wish-message">
+            <div class="wish-card-message">
                 ${escapeHTML(wish.message)}
             </div>
         </div>
     `).join("");
 
     // Tombol lihat lainnya
-    if (!showAll && allWishes.length > INITIAL_WISHES) {
+// Tombol lihat lainnya
+if (!showAll && allWishes.length > INITIAL_WISHES) {
 
-        const remaining = allWishes.length - INITIAL_WISHES;
+   
 
-        const button = document.createElement("button");
+    const button = document.createElement("button");
 
-        button.className = "show-more-wishes";
-        button.textContent = `Lihat Ucapan Lainnya ↓`;
+    button.className = "show-more-wishes";
+    button.textContent = `Lihat Ucapan Lainnya ↓`;
 
-        button.addEventListener("click", () => {
-            renderWishes(true);
-        });
+    button.addEventListener("click", () => {
+        renderWishes(true);
+    });
 
-        wishesContainer.appendChild(button);
-    }
+    wishesContainer.appendChild(button);
 }
 
+// Jalankan animasi kartu ucapan
+animateWishCards();
+}
+
+// ================================
+// ANIMASI KARTU UCAPAN
+// ================================
+function animateWishCards() {
+    const cards = document.querySelectorAll(".wish-card");
+
+    const wishObserver = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const card = entry.target;
+                    const index = [...cards].indexOf(card);
+                    card.style.animationDelay = `${index * 0.12}s`;
+                    card.classList.add("wish-animate");
+                    observer.unobserve(card);
+                }
+            });
+        },
+        { threshold: 0.15 }
+    );
+
+    cards.forEach((card) => {
+        wishObserver.observe(card);
+    });
+}
+
+// ================================
+// KELAS BADGE KEHADIRAN
+// ================================
+function attendanceClass(attendance) {
+    if (attendance === "Tidak Hadir") return "tidak-hadir";
+    if (attendance === "Ragu-ragu") return "ragu-ragu";
+    return "hadir";
+}
 
 // ================================
 // KIRIM UCAPAN
 // ================================
-async function submitWish(name, message) {
+async function submitWish(name, attendance, message) {
 
     const loading = document.getElementById("wishLoading");
     const submitButton = document.getElementById("submitWishButton");
 
     // Validasi
-    if (!name.trim() || !message.trim()) {
-        alert("Nama dan ucapan wajib diisi.");
+    if (!name.trim() || !attendance || !message.trim()) {
+        alert("Nama, konfirmasi kehadiran, dan ucapan wajib diisi.");
         return;
     }
 
@@ -378,6 +421,7 @@ async function submitWish(name, message) {
 
             body: JSON.stringify({
                 name: name.trim(),
+                attendance: attendance,
                 message: message.trim()
             })
         });
@@ -410,6 +454,8 @@ async function submitWish(name, message) {
         // Kosongkan form
         document.getElementById("wishName").value = "";
         document.getElementById("wishMessage").value = "";
+        const checkedAttendance = document.querySelector('input[name="attendance"]:checked');
+        if (checkedAttendance) checkedAttendance.checked = false;
 
 
         // Tampilkan ucapan terbaru
@@ -464,8 +510,15 @@ document.getElementById("wishForm").addEventListener("submit", function(event) {
 
     const name = document.getElementById("wishName").value;
     const message = document.getElementById("wishMessage").value;
+    const attendanceInput = document.querySelector('input[name="attendance"]:checked');
+    const attendance = attendanceInput ? attendanceInput.value : "";
 
-    submitWish(name, message);
+    if (!attendance) {
+        alert("Mohon pilih konfirmasi kehadiran.");
+        return;
+    }
+
+    submitWish(name, attendance, message);
 
 });
 // ================================

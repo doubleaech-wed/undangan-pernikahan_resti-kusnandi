@@ -364,11 +364,14 @@
 
 <section class="wishes-section" id="rsvp">
 
+    <img src="gambar/bunga.png" alt="" class="opening-flower flower-tl wish-flower">
+    <img src="gambar/bunga.png" alt="" class="opening-flower flower-br wish-flower">
+
     <div class="section-container">
 
-        <div class="section-heading">
+        <div class="section-heading reveal-on-scroll">
 
-            <p class="section-label">
+            <p class="section-label eyebrow">
                 UCAPAN & DOA
             </p>
 
@@ -381,7 +384,7 @@
 
         </div>
 
-        <form id="wishForm" class="wish-form">
+        <form id="wishForm" class="wish-form reveal-on-scroll">
 
             <div class="form-group">
 
@@ -391,6 +394,27 @@
                     placeholder="Nama"
                     required
                 >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Konfirmasi Kehadiran</label>
+
+                <div class="attendance-group" id="attendanceGroup">
+                    <label class="attendance-option">
+                        <input type="radio" name="attendance" value="Hadir" required>
+                        <span>Hadir</span>
+                    </label>
+                    <label class="attendance-option">
+                        <input type="radio" name="attendance" value="Tidak Hadir">
+                        <span>Tidak Hadir</span>
+                    </label>
+                    <label class="attendance-option">
+                        <input type="radio" name="attendance" value="Ragu-ragu">
+                        <span>Ragu-ragu</span>
+                    </label>
+                </div>
 
             </div>
 
@@ -407,6 +431,7 @@
 
             <button
                 type="submit"
+                id="submitWishButton"
                 class="wish-button"
             >
                 Kirim Ucapan
