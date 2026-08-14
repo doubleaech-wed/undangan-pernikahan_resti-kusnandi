@@ -23,6 +23,8 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -31,6 +33,8 @@ body {
   font-family: var(--body);
   line-height: 1.7;
   overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }
 
 body.locked {
@@ -128,35 +132,90 @@ img {
     height: auto;
     z-index: 2;
     pointer-events: none;
-    opacity: 0.65;
+    opacity: 0;
+    animation:
+      openingFlowerIn 1.4s cubic-bezier(.22, 1, .36, 1) forwards,
+      openingFlowerSway 7s ease-in-out infinite;
+    animation-delay: .3s, 1.7s;
 }
 
-/* KIRI ATAS */
+/* KIRI ATAS (gambar sumbernya menghadap kiri-bawah,
+   jadi di-flip vertikal, bukan diputar, supaya presisi nempel pojok) */
 .flower-tl {
     top: -10px;
     left: -10px;
-    transform: rotate(90deg)
+    --rot: 0deg;
+    --flip-y: -1;
 }
 
 /* KANAN ATAS */
 .flower-tr {
     top: -10px;
     right: -10px;
-    transform: rotate(180deg)
+    --rot: 180deg;
+     --flip-x: -1;
 }
 
 /* KIRI BAWAH */
 .flower-bl {
     bottom: -10px;
     left: -10px;
-    transform: rotate(360deg)
+    --rot: 360deg;
 }
 
 /* KANAN BAWAH */
 .flower-br {
     bottom: -10px;
     right: -10px;
-    transform: rotate(270deg)
+    --rot: 0deg;
+      --flip-x: -1;
+}
+@keyframes openingFlowerIn {
+  from {
+    opacity: 0;
+    transform: scaleY(var(--flip-y, 1)) rotate(var(--rot, 0deg)) translateY(14px);
+  }
+  to {
+    opacity: var(--flower-opacity, 0.65);
+    transform: scaleY(var(--flip-y, 1)) rotate(var(--rot, 0deg)) translateY(0);
+  }
+}
+
+@keyframes openingFlowerSway {
+  0%, 100% { transform: scaleY(var(--flip-y, 1)) rotate(var(--rot, 0deg)) translateY(0); }
+  50%      { transform: scaleY(var(--flip-y, 1)) rotate(var(--rot, 0deg)) translateY(-10px); }
+}
+
+/* Versi yang menyertakan flip horizontal (scaleX), dipakai khusus untuk
+   ornamen yang butuh dicerminkan (mis. bunga2.png pojok kanan-bawah
+   closing) tanpa mengubah animasi bunga lain yang sudah benar */
+@keyframes openingFlowerInFlipX {
+  from {
+    opacity: 0;
+    transform: scaleX(var(--flip-x, 1)) scaleY(var(--flip-y, 1)) rotate(var(--rot, 0deg)) translateY(14px);
+  }
+  to {
+    opacity: var(--flower-opacity, 0.65);
+    transform: scaleX(var(--flip-x, 1)) scaleY(var(--flip-y, 1)) rotate(var(--rot, 0deg)) translateY(0);
+  }
+}
+
+@keyframes openingFlowerSwayFlipX {
+  0%, 100% { transform: scaleX(var(--flip-x, 1)) scaleY(var(--flip-y, 1)) rotate(var(--rot, 0deg)) translateY(0); }
+  50%      { transform: scaleX(var(--flip-x, 1)) scaleY(var(--flip-y, 1)) rotate(var(--rot, 0deg)) translateY(-10px); }
+}
+
+.flower-br.flip-fix {
+  animation:
+    openingFlowerInFlipX 1.4s cubic-bezier(.22, 1, .36, 1) forwards,
+    openingFlowerSwayFlipX 7s ease-in-out infinite;
+  animation-delay: .3s, 1.7s;
+}
+
+@media (max-width: 600px) {
+  .opening-flower {
+    width: 150px;
+  }
 }
 .opening {
   position: fixed;
@@ -396,6 +455,48 @@ img {
   font-size: 13px;
 }
 
+/* Ayat Al-Quran */
+.ayat-section {
+  background: var(--forest);
+  text-align: center;
+  padding: 90px 20px;
+}
+
+.ayat-icon {
+  color: var(--gold-light);
+  font-size: 32px;
+  margin-bottom: 26px;
+}
+
+.ayat-text {
+  max-width: 620px;
+  margin: 0 auto;
+  color: #f2ede1;
+  font-family: var(--heading);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(17px, 2.3vw, 22px);
+  line-height: 1.8;
+}
+
+.ayat-source {
+  margin-top: 24px;
+  color: var(--gold-light);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .ayat-section {
+    padding: 70px 20px;
+  }
+}
+
+.ayat-section .ayat-icon.reveal-on-scroll { transition-delay: .05s; }
+.ayat-section .ayat-text.reveal-on-scroll { transition-delay: .2s; }
+.ayat-section .ayat-source.reveal-on-scroll { transition-delay: .4s; }
+
 /* Couple */
 .couple {
   display: flex;
@@ -521,6 +622,15 @@ img {
   margin-bottom: 8px;
 }
 
+.address-card::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 1px;
+  margin: 14px auto 0;
+  background: rgba(216,202,158,.5);
+}
+
 /* Countdown */
 .countdown-section {
   background: var(--sage);
@@ -535,11 +645,24 @@ img {
 }
 
 .count-box {
+  position: relative;
   padding: 24px 10px;
   border: 1px solid rgba(41,71,53,.22);
   border-radius: 10px;
   background: rgba(255,255,255,.4);
   text-align: center;
+}
+
+.count-box::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
 }
 
 .count-box strong {
@@ -632,10 +755,37 @@ img {
 }
 
 .gallery-item {
+  position: relative;
   padding: 0;
   border: 0;
   overflow: hidden;
   background: transparent;
+}
+
+.gallery-item::before,
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  z-index: 2;
+  opacity: .8;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+
+.gallery-item::before {
+  top: 8px;
+  left: 8px;
+  border-top: 2px solid var(--gold-light);
+  border-left: 2px solid var(--gold-light);
+}
+
+.gallery-item::after {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 2px solid var(--gold-light);
+  border-right: 2px solid var(--gold-light);
 }
 
 .gallery-item img {
@@ -691,6 +841,7 @@ img {
 }
 
 .location-card {
+  position: relative;
   max-width: 700px;
   min-height: 260px;
   display: grid;
@@ -699,6 +850,30 @@ img {
   border: 1px solid rgba(184,163,106,.4);
   background:
     linear-gradient(135deg, rgba(41,71,53,.08), rgba(184,163,106,.08));
+}
+
+.location-card::before,
+.location-card::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  opacity: .8;
+  pointer-events: none;
+}
+
+.location-card::before {
+  top: 14px;
+  left: 14px;
+  border-top: 1.5px solid var(--gold);
+  border-left: 1.5px solid var(--gold);
+}
+
+.location-card::after {
+  bottom: 14px;
+  right: 14px;
+  border-bottom: 1.5px solid var(--gold);
+  border-right: 1.5px solid var(--gold);
 }
 
 .location-pin {
@@ -731,12 +906,37 @@ img {
 }
 
 .gift-card {
+  position: relative;
   padding: 35px 25px;
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: 18px;
   text-align: center;
   box-shadow: 0 12px 30px rgba(30,48,38,.05);
+}
+
+.gift-card::before,
+.gift-card::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  opacity: .7;
+  pointer-events: none;
+}
+
+.gift-card::before {
+  top: 12px;
+  left: 12px;
+  border-top: 1.5px solid var(--gold-light);
+  border-left: 1.5px solid var(--gold-light);
+}
+
+.gift-card::after {
+  bottom: 12px;
+  right: 12px;
+  border-bottom: 1.5px solid var(--gold-light);
+  border-right: 1.5px solid var(--gold-light);
 }
 .bank-logo {
   display: block;
@@ -790,7 +990,6 @@ img {
     background: #f8f4ed;
     padding: 90px 20px;
     position: relative;
-    overflow: hidden;
 }
 
 .wishes-section .section-container {
@@ -803,18 +1002,22 @@ img {
 /* ORNAMEN BUNGA POJOK */
 .wish-flower {
     width: 160px;
-    opacity: 0.4;
+    --flower-opacity: 0.4;
     z-index: 1;
 }
 
-/* Garis flourish di bawah judul */
-.wishes-section .section-heading::after {
+/* Garis flourish di bawah setiap judul section (berlaku global) */
+.section-heading::after {
     content: "❧";
     display: block;
     margin-top: 16px;
     color: var(--gold);
     font-size: 20px;
     letter-spacing: 2px;
+}
+
+.event-section .section-heading::after {
+    color: var(--gold-light);
 }
 
 .wish-form {
@@ -1226,6 +1429,68 @@ width: 190px;
   margin: auto;
   color: var(--muted);
   font-size: 12px;
+}
+
+/* =========================================================
+   ORNAMEN BUNGA TAMBAHAN (reusable)
+   ---------------------------------------------------------
+   Cara pakai:
+   1. Taruh file gambar bunga kamu di folder /gambar,
+      lalu sesuaikan nama file pada atribut src di index.html
+      (cari komentar <!-- ORNAMEN BUNGA --> di tiap section).
+   2. Animasi (fade-in + melambai halus) sudah otomatis
+      jalan begitu section-nya discroll ke layar — tidak
+      perlu edit script.js sama sekali.
+   3. Untuk pindah section lain, cukup copy tag <img> yang
+      sudah ada dan tempel di section yang kamu mau,
+      lalu pastikan section tsb punya "position: relative;"
+      (lihat daftar section di bawah).
+========================================================= */
+
+.deco-flower {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.deco-flower.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.deco-flower.reveal-on-scroll.visible {
+  opacity: .45;
+  transform: translateY(0);
+  animation: decoSway 7s ease-in-out infinite;
+}
+
+.deco-flower.pos-tl { top: -20px; left: -20px; --rot: 6deg; }
+.deco-flower.pos-tr { top: -20px; right: -20px; --rot: -6deg; }
+.deco-flower.pos-bl { bottom: -20px; left: -20px; --rot: -6deg; }
+.deco-flower.pos-br { bottom: -20px; right: -20px; --rot: 6deg; }
+
+@keyframes decoSway {
+  0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+  50%      { transform: translateY(-10px) rotate(calc(var(--rot, 0deg) * -1)); }
+}
+
+/* Section yang butuh position:relative supaya bunga menempel rapi di pojoknya */
+#mempelai,
+.story-section,
+.location-section,
+.closing {
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .deco-flower {
+    width: 85px;
+    height: 85px;
+  }
 }
 
 /* Scroll animation */
